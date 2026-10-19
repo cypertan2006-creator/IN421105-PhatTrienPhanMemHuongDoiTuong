@@ -1,4 +1,4 @@
-namespace eduHub.Ch01.Domain;
+namespace EduHub.Ch01.Domain;
 
 /// <summary>Sự kiện do câu lạc bộ tổ chức.</summary>
 public class Event
@@ -7,7 +7,7 @@ public class Event
     public Guid Id { get; private set; }
 
     /// <summary>Khóa ngoại: Id của câu lạc bộ .</summary>
-    public string ClubId { get; private set; }
+    public Guid ClubId { get; private set; }
 
     /// <summary>Tiêu đề sự kiện.</summary>
     public string Title { get; private set; }
@@ -21,7 +21,7 @@ public class Event
     /// <summary>Sự kiện trực tiếp hay trực tuyến.</summary>
     public bool IsOnline { get; private set; }
 
-    private Event(string clubId, string title, DateTime date, int capacity, bool isOnline)
+    private Event(Guid clubId, string title, DateTime date, int capacity, bool isOnline)
     {
         Id = Guid.NewGuid();
         ClubId = clubId;
@@ -33,9 +33,9 @@ public class Event
 
     /// <summary>Kiểm tra dữ liệu rồi tạo sự kiện mới.</summary>
     /// <exception cref="ArgumentException">Id câu lạc bộ không được để trống hoặc tiêu đề rỗng hoặc số người tham dự không hợp lệ.</exception>
-    public static Event Create(string clubId, string title, DateTime date, int capacity, bool isOnline)
+    public static Event Create(Guid clubId, string title, DateTime date, int capacity, bool isOnline)
     {
-        if (string.IsNullOrWhiteSpace(clubId))
+        if (clubId == Guid.Empty)
             throw new ArgumentException("Id câu lạc bộ không được để trống.", nameof(clubId));
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Tiêu đề sự kiện không được để trống.", nameof(title));
@@ -46,5 +46,5 @@ public class Event
     }
     
     /// <summary>Sự kiện còn chỗ hay không.</summary>
-    public bool HasAvailableSpots => Capacity > 0;
+    public bool HasAvailableSpots(int confirmedCount) => confirmedCount < Capacity;
 }

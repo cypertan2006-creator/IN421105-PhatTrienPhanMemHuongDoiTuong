@@ -1,19 +1,19 @@
 namespace EduHub.Ch01.Domain;
 
 /// <summary>Các trạng thái của phiếu đăng ký.</summary>
-public static class RegistrationStatus
+public enum RegistrationStatus
 {
     /// <summary>Chờ xác nhận.</summary>
-    public const string Pending = "Pending";
+    Pending,
 
     /// <summary>Đã xác nhận.</summary>
-    public const string Confirmed = "Confirmed";
+    Confirmed,
 
     /// <summary>Đã huỷ.</summary>
-    public const string Cancelled = "Cancelled";
+    Cancelled
 }
 
-/// <summary>Phiếu đăng ký của 1 thành viên tham dự sự kiện.</summary>
+/// <summary>Phiếu đăng ký của một thành viên cho một sự kiện.</summary>
 public class Registration
 {
     /// <summary>Khoá chính.</summary>
@@ -28,19 +28,19 @@ public class Registration
     /// <summary>Thời điểm đăng ký.</summary>
     public DateTime RegisteredAt { get; private set; }
 
-    /// <summary>Trạng thái hiện tại, lấy từ <see cref="RegistrationStatus"/>.</summary>
-    public string Status { get; private set; }
+    /// <summary>Trạng thái hiện tại.</summary>
+    public RegistrationStatus Status { get; private set; }
 
     private Registration(Guid memberId, Guid eventId)
     {
         Id = Guid.NewGuid();
         MemberId = memberId;
         EventId = eventId;
-        RegisteredAt = DateTime.UtcNow;
+        RegisteredAt = DateTime.Now;
         Status = RegistrationStatus.Pending;
     }
 
-    /// <summary>Kiểm tra dữ liệu rồi tạo phiếu đăng ký mới.</summary>
+    /// <summary>Tạo phiếu đăng ký mới ở trạng thái Pending.</summary>
     /// <exception cref="ArgumentException">Thiếu thành viên hoặc thiếu sự kiện.</exception>
     public static Registration Create(Guid memberId, Guid eventId)
     {
