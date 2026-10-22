@@ -25,7 +25,7 @@ public class Club
         Id = Guid.NewGuid();
         Name = name;
         Description = description;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
     }
 
     /// <summary>Kiểm tra dữ liệu rồi tạo câu lạc bộ mới.</summary>
